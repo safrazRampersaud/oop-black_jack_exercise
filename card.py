@@ -1,76 +1,38 @@
-from card_types import SUIT, FACE
-from abc import ABC
+from dataclasses import dataclass, field
+from typing import List
+from enum import Enum, auto
 
 
-class Card(ABC):
-    def __init__(self, value, suit):
-        self.__value = value
-        self.__suit = suit
-
-    @property
-    def value(self):
-        return self.__value
-
-    @property
-    def suit(self):
-        return self.__suit
-
-    def __str__(self):
-        return f'''Suit={self.__suit},Value={self.__value}'''
+class Suites(Enum):
+    """Suites.CLUB.value='♣'"""
+    CLUB = chr(9827)
+    """Suites.DIAMOND.value='♢'"""
+    DIAMOND = chr(9830)
+    """Suites.HEART.value='♡'"""
+    HEART = chr(9829)
+    """Suites.SPADE.value='♠'"""
+    SPADE = chr(9824)
 
 
-class Heart(Card):
-    def __init__(self, value):
-        self.__suit = SUIT.HEART
-        self.__value = value
-        super().__init__(value=self.__value, suit=self.__suit)
+@dataclass(frozen=True)
+class Card:
+    value: str
+    suite: str
+
+    def __repr__(self):
+        return f'''[{self.value}:{self.suite}]'''
 
 
-class Diamond(Card):
-    def __init__(self, value):
-        self.__suit = SUIT.DIAMOND
-        self.__value = value
-        super().__init__(value=self.__value, suit=self.__suit)
+def _suites():
+    return [Suites.HEART, Suites.SPADE, Suites.DIAMOND, Suites.CLUB]
 
 
-class Spade(Card):
-    def __init__(self, value):
-        self.__suit = SUIT.SPADE
-        self.__value = value
-        super().__init__(value=self.__value, suit=self.__suit)
+def _values():
+    return '2 3 4 5 6 7 8 9 10 J Q K A'.split()
 
 
-class Club(Card):
-    def __init__(self, value):
-        self.__suit = SUIT.CLUB
-        self.__value = value
-        super().__init__(value=self.__value, suit=self.__suit)
-
-
-class King(Card):
-    def __init__(self, suit):
-        self.__suit = suit
-        self.__value = FACE.KING
-        super().__init__(value=self.__value, suit=self.__suit)
-
-
-class Queen(Card):
-    def __init__(self, suit):
-        self.__suit = suit
-        self.__value = FACE.QUEEN
-        super().__init__(value=self.__value, suit=self.__suit)
-
-
-class Jack(Card):
-    def __init__(self, suit):
-        self.__suit = suit
-        self.__value = FACE.JACK
-        super().__init__(value=self.__value, suit=self.__suit)
-
-
-class Ace(Card):
-    def __init__(self, suit):
-        self.__suit = suit
-        self.__value = FACE.ACE
-        super().__init__(value=self.__value, suit=self.__suit)
+@dataclass(frozen=True)
+class CardDefaults:
+    suites: List[str] = field(default_factory=_suites)
+    values: List[str] = field(default_factory=_values)
 
