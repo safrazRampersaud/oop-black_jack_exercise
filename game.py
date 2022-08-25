@@ -1,4 +1,5 @@
 from actors import *
+from card import *
 
 
 class Game:
@@ -25,23 +26,27 @@ class Game:
 
     def __get_winner(self):
         if self.__winner == 0:
-            print(f'''Winner=Dealer, Score={self.__dealer.score}''')
+            print(f'''Winner=Dealer, Score={self.__dealer.score}, Hand={self.__dealer.hand}''')
         else:
             w_player = [player for player in self.__players if player.id == self.__winner][0]
-            print(f'''Winner=Player-{w_player.id}, Score={w_player.score}''')
+            print(f'''Winner=Player-{w_player.id}, Score={w_player.score}, Hand={w_player.hand}''')
+        print("Table:")
+        for player in self.__players:
+            if player.id != self.__winner:
+                print(f'''Player-{player.id}, Score={player.score}, Hand={player.hand}''')
+        if self.__winner != 0:
+            print(f'''Dealer={self.__dealer.id}, Score={self.__dealer.score}, Hand={self.__dealer.hand}''')
 
     def __calculate(self, active_player):
         total_score = 0
         for card in active_player.hand:
-            if card.value in ('J', 'Q', 'K'):
-                total_score = total_score + 10
-            elif card.value not in ('J', 'Q', 'K', 'A'):
-                total_score = total_score + int(card.value)
+            if card.value in [a for a in CardDefaults().values if a != Values.ACE]:
+                total_score = total_score + card.value.value
             else:
-                if total_score < 10:
-                    total_score = total_score + 11
+                if total_score <= 10:
+                    total_score = total_score + Values.ACE11.value
                 else:
-                    total_score = total_score + 1
+                    total_score = total_score + Values.ACE.value
         active_player.score = total_score
 
     def init_deal(self):
