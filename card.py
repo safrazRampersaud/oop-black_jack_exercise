@@ -14,9 +14,26 @@ class Suites(Enum):
     SPADE = chr(9824)
 
 
+class Values(Enum):
+    ACE = 1
+    TWO = 2
+    THREE = 3
+    FOUR = 4
+    FIVE = 5
+    SIX = 6
+    SEVEN = 7
+    EIGHT = 8
+    NINE = 9
+    TEN = 10
+    JACK = 10
+    QUEEN = 10
+    KING = 10
+    ACE11 = 11
+
+
 @dataclass(frozen=True)
 class Card:
-    value: str
+    value: int
     suite: str
 
     def __repr__(self):
@@ -28,11 +45,17 @@ def _suites():
 
 
 def _values():
-    return '2 3 4 5 6 7 8 9 10 J Q K A'.split()
+    return [
+        Values.ACE, Values.TWO, Values.THREE,
+        Values.FOUR, Values.FIVE, Values.SIX,
+        Values.SEVEN, Values.EIGHT, Values.NINE,
+        Values.TEN, Values.JACK, Values.QUEEN,
+        Values.KING
+    ]
 
 
 @dataclass(frozen=True)
 class CardDefaults:
     suites: List[str] = field(default_factory=_suites)
-    values: List[str] = field(default_factory=_values)
+    values: List[int] = field(default_factory=_values)
 
