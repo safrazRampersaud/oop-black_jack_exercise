@@ -21,7 +21,6 @@ class Game:
             if max_score < active_player.score:
                 max_score = active_player.score
                 self.__winner = active_player.id
-            print(active_player.profile)
         self.__get_winner()
 
     def __get_winner(self):
@@ -31,14 +30,13 @@ class Game:
             w_player = [player for player in self.__players if player.id == self.__winner][0]
             print(f'''Winner=Player-{w_player.id}, Score={w_player.score}''')
 
-
     def __calculate(self, active_player):
         total_score = 0
         for card in active_player.hand:
-            if card.value in (FACE.KING, FACE.QUEEN, FACE.JACK):
+            if card.value in ('J', 'Q', 'K'):
                 total_score = total_score + 10
-            elif card.value not in (FACE.KING, FACE.QUEEN, FACE.JACK, FACE.ACE):
-                total_score = total_score + card.value
+            elif card.value not in ('J', 'Q', 'K', 'A'):
+                total_score = total_score + int(card.value)
             else:
                 if total_score < 10:
                     total_score = total_score + 11
@@ -57,8 +55,8 @@ class Game:
 
         for seq in self.__deal_sequence:
             self.__activate_actor(player_ids[seq])
-            active_player = self.__get_active_actor()
-            active_player.hand.append(self.__deal_card())
+            active_actor = self.__get_active_actor()
+            active_actor.hand.append(self.__deal_card())
 
     def get_active_actor(self):
         if self.__dealer.active:
@@ -81,7 +79,7 @@ class Game:
         if active_player_id == 0:
             self.__dealer.active = True
             for player in self.__players:
-                if active_player_id == player.id:
+                if active_player_id != player.id:
                     player.active = False
         else:
             for player in self.__players:
