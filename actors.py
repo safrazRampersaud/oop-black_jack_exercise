@@ -53,4 +53,3 @@ class Dealer(Actor):
     @property
     def hit(self):
         return False if self.stand else True
-
